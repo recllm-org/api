@@ -1,9 +1,10 @@
 from .db import BasicDatabase
+from fastapi import Request
 
-db = BasicDatabase({'recllm_users': 'UserTable', 'recllm_items': 'ItemTable'})
 
-def get_db():
+
+def get_db(request: Request):
 	try:
-		yield db
+		yield request.app.db
 	finally:
 		pass  # Connection handling is managed by BasicDatabase class

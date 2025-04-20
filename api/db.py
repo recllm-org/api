@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.automap import automap_base
+from pgvector.sqlalchemy import Vector
 from .utils import EnvVars
 
 
