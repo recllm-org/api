@@ -1,5 +1,6 @@
 from api import App
 from api.config import Config
+from fastapi.middleware.cors import CORSMiddleware
 
 
 
