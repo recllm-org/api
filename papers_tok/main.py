@@ -18,14 +18,14 @@ app.add_middleware(
 )
 
 
-def recommendations(user_id, user_tablename, already_shown, top_k):
+def recommendations(user_id, user_tablename, already_shown, likes, top_k):
   with app.db.Session() as session:
     RecLLMUsers = app.db.RecLLMUsers
     RecLLMItems = app.db.RecLLMItems
     recllm_user = session.query(RecLLMUsers).filter(RecLLMUsers.tablename==user_tablename and RecLLMUsers.row_id==user_id).first()
     recllm_items = (
       session.query(RecLLMItems)
-      .filter(RecLLMItems.id.notin_(already_shown))
+      .filter(RecLLMItems.row_id.notin_(already_shown+likes))
       .order_by(Vector.comparator_factory.cosine_distance(RecLLMItems.embedding, recllm_user.embedding))
       .limit(top_k)
       .all()
@@ -34,19 +34,21 @@ def recommendations(user_id, user_tablename, already_shown, top_k):
 
 
 class RecommendationsRequest(BaseModel):
-  already_shown: list[str] = []
+  already_shown: list[int] = []
+  likes: list[int] = []
 
 
-@app.get('/recommendations/{user_id}')
+@app.post('/recommendations/{user_id}')
 def get_recommendations(
-    user_id: str,
-    user_tablename: str,
-    top_k: int,
-    request: RecommendationsRequest
+  user_id: str,
+  user_tablename: str,
+  top_k: int,
+  request: RecommendationsRequest
 ):
   return recommendations(
     user_id=user_id,
     user_tablename=user_tablename,
     already_shown=request.already_shown,
+    likes=request.likes,
     top_k=top_k
   )
