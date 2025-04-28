@@ -29,3 +29,6 @@ class BasicDatabase:
     for tablename in reqd_tables:
       existing_tables[tablename] = AutomapBase.classes[tablename]
     return existing_tables
+  
+  def close(self):
+    self.engine.dispose()
