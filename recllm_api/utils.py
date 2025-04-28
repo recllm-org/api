@@ -11,3 +11,8 @@ class EnvVars:
       return EnvVars.envars.get(key) or os.environ.get(key)
     else:
       return EnvVars.envars.get(key)
+
+
+class Config:
+  def __init__(self, reqd_tables):
+    self.reqd_tables = reqd_tables

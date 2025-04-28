@@ -16,15 +16,16 @@ def get_connection_string():
     
 
 class BasicDatabase:
-  def __init__(self, reqd_tables):
+  def __init__(self):
     self.engine = create_engine(get_connection_string())
     self.Session = sessionmaker(bind=self.engine)
-    self.get_existing_tables(reqd_tables)
   
-  def get_existing_tables(self, reqd_tables):
+  def pull_existing_tables(self, reqd_tables):
     metadata = MetaData()
     metadata.reflect(bind=self.engine)
     AutomapBase = automap_base(metadata=metadata)
     AutomapBase.prepare()
-    for tablename, classname in reqd_tables.items():
-      self.__setattr__(classname, AutomapBase.classes[tablename])
+    existing_tables = {}
+    for tablename in reqd_tables:
+      existing_tables[tablename] = AutomapBase.classes[tablename]
+    return existing_tables
