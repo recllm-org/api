@@ -3,7 +3,7 @@ from .db import BasicDatabase
 
 
 
-class API(FastAPI):
+class RecLLMAPI(FastAPI):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
 		self.db = BasicDatabase()
