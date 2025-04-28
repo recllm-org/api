@@ -1,2 +1,2 @@
-from .app import App
+from .app import API
 from .utils import Config
