@@ -6,9 +6,9 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "fastapi[standard]>=0.115.12",
-    "pgvector>=0.4.0",
-    "psycopg2-binary>=2.9.10",
-    "python-dotenv>=1.1.0",
+    "recllm-core",
     "requests>=2.32.3",
-    "sqlalchemy>=2.0.40",
 ]
+
+[tool.uv.sources]
+recllm-core = { git = "ssh://git@github.com/recllm-org/core.git" }
