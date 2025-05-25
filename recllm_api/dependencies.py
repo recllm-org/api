@@ -22,7 +22,6 @@ def get_user(api_key, db):
 
 class AuthMiddleware(BaseHTTPMiddleware):
   async def dispatch(self, request: Request, call_next):
-    request.state.db = next(get_db(request))
     # Get API Key
     api_key = request.headers.get('authorization')
     # Authorization: Bearer 
@@ -45,7 +44,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
         content={'detail': 'Invalid API key format - must be a valid API Key'}
       )
     # Get user
-    user = get_user(api_key, request.state.db)
+    user = get_user(api_key, request.app.db)
     if not user:
       return JSONResponse(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -53,4 +52,4 @@ class AuthMiddleware(BaseHTTPMiddleware):
       )
     request.state.user = user
     response = await call_next(request)
-    return response 
+    return response
